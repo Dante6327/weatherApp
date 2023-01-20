@@ -1,24 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import GlobalStyle from "./assets/styles/GlobalStyle";
+import { GetCurrentWeather } from "./components/GetCurrentWeather";
 
 function App() {
+  const [data, setData] = useState();
+  useEffect(() => {
+    GetCurrentWeather().then((res) => setData(res));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GlobalStyle />
+      {JSON.stringify(data)}
+    </>
   );
 }
 
