@@ -1,4 +1,4 @@
-export const GetCurrentWeather = async () => {
+export const getCurrentWeather = async () => {
   const myPos = await getMyPos();
   const latitude = myPos.coords.latitude;
   const longitude = myPos.coords.longitude;
@@ -15,7 +15,7 @@ const getMyPos = () => {
 const getWeatherByCurrentLocation = async (lat, lon) => {
   let weather = {};
   const url = `${process.env.REACT_APP_WEATHER_URL}/current`;
-  const apiKey = `${process.env.REACT_APP_WEATHER_API_KEY}`;
+  const apiKey = `${process.env.REACT_APP_WEATHER_API_KEY}123`;
 
   try {
     const response = await fetch(
@@ -29,7 +29,7 @@ const getWeatherByCurrentLocation = async (lat, lon) => {
     weather.country = data.location.country; //국가
     weather.city = data.location.name; //도시
     weather.temperature = data.current.temperature; //온도
-    weather.whatherIcon = data.current.weather_icons; //날씨아이콘
+    weather.weatherIcon = data.current.weather_icons; //날씨아이콘
     weather.weatherDescription = data.current.weather_descriptions; //날씨상태
     weather.windSpeed = data.current.wind_speed; //풍속
     weather.windDir = data.current.wind_dir; //풍향
@@ -39,7 +39,18 @@ const getWeatherByCurrentLocation = async (lat, lon) => {
   } catch (error) {
     //임시로 이렇게 쓰자.. API 최대 호출이 월 250회란다..
     //apiKey 뒤에 123 빼면 정상호출된다.
+    const weather = {};
+    weather.country = "South Korea";
+    weather.city = "Singal";
+    weather.temperature = -6;
+    weather.weatherIcon = [
+      "https://cdn.worldweatheronline.com/images/wsymbols01_png_64/wsymbol_0008_clear_sky_night.png",
+    ];
+    weather.weatherDescription = ["Clear"];
+    weather.windSpeed = 13;
+    weather.windDir = "NW";
 
-    return error;
+    //return error;
+    return weather;
   }
 };
