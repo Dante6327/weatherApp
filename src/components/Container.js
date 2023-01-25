@@ -33,7 +33,7 @@ const CustomLoadig = styled.img`
 
 const Container = () => {
   //API 호출이 완료되지 않았을 경우 loading은 true로 들어오며, 이를 통해 Loading 사용
-  const [value, loading] = useContext(WeatherContext);
+  const [current, forecast, loading] = useContext(WeatherContext);
   if (loading) {
     return (
       <Background src={bgImg}>

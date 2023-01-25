@@ -6,7 +6,7 @@ export const getCurrentWeather = async () => {
   return await getWeatherByCurrentLocation(latitude, longitude);
 };
 
-const getMyPos = () => {
+export const getMyPos = () => {
   return new Promise((resolve, rejected) => {
     navigator.geolocation.getCurrentPosition(resolve, rejected);
   });
@@ -14,8 +14,9 @@ const getMyPos = () => {
 
 const getWeatherByCurrentLocation = async (lat, lon) => {
   let weather = {};
-  const url = `${process.env.REACT_APP_WEATHER_URL}/current`;
-  const apiKey = `${process.env.REACT_APP_WEATHER_API_KEY}123`;
+  let forecast = {};
+  const url = `${process.env.REACT_APP_WEATHER_URL}/forecast`;
+  const apiKey = `${process.env.REACT_APP_WEATHER_API_KEY}`;
 
   try {
     const response = await fetch(
@@ -25,6 +26,7 @@ const getWeatherByCurrentLocation = async (lat, lon) => {
     if (data.success !== undefined && data.success === false) {
       throw new Error(data.error.info);
     }
+    const foreDay = Object.keys(data.forecast)[0];
 
     weather.country = data.location.country; //국가
     weather.city = data.location.name; //도시
@@ -34,23 +36,19 @@ const getWeatherByCurrentLocation = async (lat, lon) => {
     weather.windSpeed = data.current.wind_speed; //풍속
     weather.windDir = data.current.wind_dir; //풍향
 
-    //return weather;
-    return weather;
-  } catch (error) {
-    //임시로 이렇게 쓰자.. API 최대 호출이 월 250회란다..
-    //apiKey 뒤에 123 빼면 정상호출된다.
-    const weather = {};
-    weather.country = "South Korea";
-    weather.city = "Singal";
-    weather.temperature = -6;
-    weather.weatherIcon = [
-      "https://cdn.worldweatheronline.com/images/wsymbols01_png_64/wsymbol_0008_clear_sky_night.png",
-    ];
-    weather.weatherDescription = ["Clear"];
-    weather.windSpeed = 13;
-    weather.windDir = "NW";
+    forecast.maxtemp = data.forecast[foreDay].maxtemp;
+    forecast.mintemp = data.forecast[foreDay].mintemp;
+    forecast.avgtemp = data.forecast[foreDay].avgtemp;
+    forecast.uvIndex = data.forecast[foreDay].uv_index;
+    forecast.sunrise = data.forecast[foreDay].astro.sunrise;
+    forecast.sunset = data.forecast[foreDay].astro.sunset;
+    forecast.munrise = data.forecast[foreDay].astro.moonrise;
+    forecast.munset = data.forecast[foreDay].astro.moonset;
+    forecast.moonIllumination = data.forecast[foreDay].astro.moon_illumination;
 
-    //return error;
-    return weather;
+    //return weather;
+    return [weather, forecast];
+  } catch (error) {
+    return error;
   }
 };

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const AppTitle = styled.div`
   text-align: center;
-  font-size: 24px;
+  font-size: 48px;
   padding-top: 20px;
 `;
 
